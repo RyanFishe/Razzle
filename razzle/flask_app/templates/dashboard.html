@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,81 +9,66 @@
     <link href="static/css/style.css" rel="stylesheet">
     <title>Dashboard</title>
 </head>
+
 <body>
     <div class="banner">
         <div class="row bg-dark" style="display: flex; align-items: center; width: 100%; justify-content: flex-start;">
 
             <div class="col col-lg-4">
-                <h1 style = " display: flex;justify-content: left; color: magenta; margin-left: 10px;">Welcome {{session['user_name']}}!!!</h1>
+                <h1><a href="/dashboard">Razzle</a></h1>
             </div>
             <div class="col col-4 "></div>
             <div class="col">
-                <a href="/painting/add">Create</a>
-                        
-
+                <a href="/about">Company</a>
             </div>
-        
+            <div class="col">
+                <a href="/categories">Categories</a>
+            </div>
+            <div class="col">
+
+                <a href="/view_cart"><img src="/static/img/cart-light.png" id="cart_icon"></a>
+            </div>
             <div class="col">
                 <form action="/logout" class="bg-dark" method="post">
-                        <input type="submit" class=" bg-dark text-primary" value="Logout">
-                </form> 
+                    <input type="submit" class=" bg-dark text-primary" value="Logout">
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="container bg-dark text-white d-flex" style="margin-top: 5px;">
-        
-        
-        <div class="col">
-            <h4>These are the paintings</h4>
-            <table class="table-borderless ">
-                <thead>
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Artist</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for painting in all_paintings %}
-                        <tr>
-                            <td>
-                                <a href="/painting/{{painting.id}}">{{painting.name}}</a> 
-                            </td>
-                            <td>
-                                | by {{painting.artist}} |
-                            </td>
-                            <td class="d-flex">
-                            {% if session['user_id'] == painting.user_id %}
-                                <a href="/painting/edit/{{painting.id}}">edit</a>
-                                | 
-                                <a href="/delete/{{painting.id}}">delete</a>
-                            {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                <tbody>
-            </table>
+    <div class="container bg-dark text-white d-flexbox">
+        <div class="banner_box" style="display: flex-box; justify-content: center; width: inherit; ">
+            <div class="banner_title">
+                <h2 style="display: flex; justify-content: center">New Arrivals</h2>
+            </div>
+            <div class="bannerRow">
+                <img src="./static/img/blue_neck.jpg" alt="left" id="left" onclick="swap1()">
+                <img src="./static/img/gold_ear.jpg" alt="cafe" id="Big">
+                <img src="./static/img/gold_neck.jpg" alt="right" id="right" onclick="swap2()">
+            </div>
+            <div class="dashDecor">
+                <h1>___</h1>
+                <h1 id="dashP">___</h1>
+                <h1>___</h1>
+                <h1>___</h1>
+            </div>
         </div>
-        <div class="col">
-            <h4 style="color: white;">Your purchased paintings:</h4>
-            <table class="table table-sm table-bordered " style="color: white; border: 2px solid white; ">
-                <thead>
-                    <tr>
-                        <th class="col-2">Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for painting in purchases %}
-                    
-                        <tr>
-                            <td><a href="/painting/{{painting.this_purchase.id}}">{{painting.this_purchase.name}}</a>  by {{painting.this_purchase.artist}} </td>
-                        </tr>
-                    
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="gallery text-center  " style="width:100%;">
+            {% for product in all_products %}
+            <div class="card">
+                <a href={{product.id}}>
+                <img src={{product.image_url}} alt="Denim Jeans" style="width:100%" onclick="url = /{{product.id}}">
+                </a>
+                <h1>{{product.name}}</h1>
+                <p class="price">${{product.price}}</p>
+                <p class="dashDes">{{product.description}}</p>
+                <p><button>Add to Cart</button></p>
+            </div>
+            {% endfor %}
+
         </div>
+
     </div>
 </body>
+
 </html>

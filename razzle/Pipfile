@@ -5,10 +5,12 @@ name = "pypi"
 
 [packages]
 flask = "*"
-wtform = "*"
-flask-bcrypt = "*"
+flash = "*"
 pymysql = "*"
+bcrypt = "*"
+wtform = "*"
 wtforms = "*"
+flask-bcrypt = "*"
 
 [dev-packages]
 

@@ -1,11 +1,12 @@
-from flask import render_template, redirect, request, session, flash
-from flask_app import app
-from flask_app.models.user import User
-from flask_app.models.painting import Painting
+# from unicodedata import category
 from pprint import pprint
 
+from flask import flash, redirect, render_template, request, session
+from flask_app import app
+from flask_app.models import user, category, product
 # from flask_app.models import Message
 from flask_bcrypt import Bcrypt
+
 bcrypt = Bcrypt(app)
 
 
@@ -22,7 +23,7 @@ def create_account():
             flash("Passwords don't match!")
             return redirect('/')
 
-        if not User.validate_register(request.form):
+        if not user.User.validate_register(request.form):
             return redirect('/')
 
             #hashes the requested password if the form is validated 
@@ -36,7 +37,7 @@ def create_account():
             "password" : pw_hash
         }
         # Call the save @classmethod on User
-        session['user_id'] = User.save(data)
+        session['user_id'] = user.User.save(data)
         session['user_name'] = request.form['first_name']
         session['full_name'] = request.form['first_name'] + ' ' + request.form['last_name']
 
@@ -47,7 +48,7 @@ def create_account():
 def process_login(): 
             # see if the username provided exists in the database
         data = { "email" : request.form["email"] }
-        user_in_db = User.get_by_email(data)
+        user_in_db = user.User.get_by_email(data)
         # user is not registered in the db
         if not user_in_db:
             flash("Invalid Email/Password")
@@ -72,28 +73,29 @@ def show_dashboard():
     data = { 
         "id": session['user_id'] 
         }
-    user= User.get_one(data)
-    all_users = User.get_all()
-    all_paintings = Painting.get_all()
-    purchases = []
-    purchases = User.get_purchases(data)
-    if (user.this_purchase) == None:
-        return render_template("dashboard.html", user = user, all_users = all_users, all_paintings = all_paintings, purchases=purchases )
+    
+    # user =  user.User.get_one(data)
+    # all_users = user.User.get_all()
+    all_products = product.Product.get_all()
 
-    pprint(purchases[0].this_purchase)
+    # pprint(purchases[0].this_purchase)
     
-    return render_template("dashboard.html", user = user, all_users = all_users, all_paintings = all_paintings, purchases = purchases )
+    return render_template("dashboard.html", all_products = all_products )
+    # return render_template("/dashboard.html")
+@app.route("/view_cart")
+def show_cart():
+    return render_template("cart.html")
     
-@app.route('/join/painting',methods=['POST'])
-def join_painting():
+@app.route('/join/product',methods=['POST'])
+def join_product():
     new_quantity = int(request.form['quantity']) - 1
     data = {
         'user_id': request.form['user_id'],
-        'painting_id': request.form['painting_id'],
+        'product_id': request.form['product_id'],
         'quantity': new_quantity
     }
-    User.update_quantity(data)
-    User.make_purchase(data)
+    user.User.update_quantity(data)
+    user.User.make_purchase(data)
     return redirect("/dashboard ")
 
 @app.route('/logout', methods=['POST'])
