@@ -34,30 +34,115 @@
             </div>
         </div>
     </div>
+    <div class="content d-flex">
+        <div class="container bg-dark text-white" style="margin-top: 5px; width:max-content; padding: 50px; border: solid 2px white;">
+            <h1>Add Product</h1>
+            {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                        {% if messages %}                            <!-- check if there are any messages -->
+                            {% for message in messages %}            <!-- loop through the messages -->
+                                <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+            <form action="/product/create" method="post">
+                <input type="hidden" value="{{session['user_id']}}" name="user_id">
 
-    <div class="container bg-dark text-white" style="margin-top: 5px;">
-        {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
-                    {% if messages %}                            <!-- check if there are any messages -->
-                        {% for message in messages %}            <!-- loop through the messages -->
-                            <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" required placeholder="Jade Ring">
+
+                    <label for="description" class="form-label">Description</label>
+                    <textarea rows="3" class="form-control" name="description" id="description" required placeholder="Jade Ring that is a jade and ring"></textarea>
+
+                    <label for="price" class="form-label">Price</label>
+                    <div class="input-group mb-3">
+                        
+                        <span class="input-group-text">$</span>
+                        <input type="decimal" class="form-control" name="price" id="price" placeholder="67.99" required>
+                    </div>
+
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" name="quantity" id="quantity" required placeholder="200">
+
+                    <label for="image_url" class="form-label">image_url</label>
+                    <input type="text" class="form-control" name="image_url" id="image_url" required placeholder="Jade Ring.jpg">
+
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" aria-label="Default select example" name="category" id="category" required>
+                        {% for category in all_categories %}
+                            <option value={{category.id}}>{{category.category}}</option>
                         {% endfor %}
-                    {% endif %}
-                {% endwith %}
-        <form action="/product/create" method="post">
-            <input type="hidden" value="{{session['user_id']}}" name="user_id">
-            <div class="col col-3 text-center">
-                <label for="name">Name:</label>
-                <input type="text" name="name" id="name" required>
-                <label for="description">Description:</label>
-                <input type="textarea" name="description" id="description" required>
-                <label for="price">Price:</label>
-                <input type="number" name="price" id="price" required>
-                <label for="quantity">Quantity:</label>
-                <input type="number" name="quantity" id="quantity" required>
-            </div>
-            <input type="submit" value="Create">
-        </form>
+                    </select>
+                </div>
+                <input type="submit" value="Create">
+            </form>
 
+            
+
+        </div>
+                <div class="container bg-dark text-white" style="margin-top: 5px; width:max-content; padding: 50px; border: solid 2px white;">
+            <h1>Edit Product</h1>
+            {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                        {% if messages %}                            <!-- check if there are any messages -->
+                            {% for message in messages %}            <!-- loop through the messages -->
+                                <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+            <form action="/edit_product" method="post">
+                <input type="hidden" value="{{session['user_id']}}" name="user_id">
+
+                <div class="mb-3">
+                    <label for="id" class="form-label">Choose Product</label><br>
+                    <!-- <select class="form-select" aria-label="Default select example" oninput= name="id" id="id" required> -->
+                        {% for product in all_products %}
+                            <!-- <option value={{product.id}}>{{product.name}}</option> -->
+                            <a href = "/product/edit/{{ product.id }}"> {{ product.name }} </a> <br>
+                        {% endfor %}
+                    <!-- </select> -->
+
+
+                </div>
+
+        </div>
+        <div class="container bg-dark text-white" style="margin-top: 5px; width:max-content; padding: 50px; border: solid 2px white;">
+            <h3>Add Category</h3>
+            <form action="/category/create" method="post">
+                <label for="category" class="form-label">Name of Category</label>
+                <input type="text" class="form-control" name="category" id="category" required>
+                <br>
+                <input type="submit" value="Create">
+        </form>
+        <br><br>
+            <h3>Edit Category</h3>
+            <form action="/edit_category" method="post">
+                <label for="id" class="form-label">Category</label>
+                    <select class="form-select" aria-label="Default select example" name="id" id="id" required>
+                        {% for category in all_categories %}
+                            <option value={{category.id}}>{{category.category}}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="category" class="form-label">New Name</label>
+                <input type="text" class="form-control" name="category" id="category" required>
+                    
+                    <br>
+                <input type="submit" value="Edit">
+        </form>
+        <br><br>
+        <h3>Delete Category</h3>
+            <form action="/delete_category" method="post">
+                <label for="id" class="form-label">Category</label>
+                    <select class="form-select" aria-label="Default select example" name="id" id="id" required>
+                        {% for category in all_categories %}
+                            <option value={{category.id}}>{{category.category}}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                <input type="submit" value="Delete">
+        </form>
+        </div> 
+        
     </div>
+
 </body>
 </html>

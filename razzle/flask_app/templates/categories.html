@@ -25,9 +25,7 @@
                 <a href="/categories">Categories</a>
             </div>
             <div class="col">
-                <form action="/view_cart" class="bg-dark" method="post">
-                    <input type="image" class=" bg-dark text-primary" src="/static/img/cart-light.png" width="50px;" alt="Submit Form">
-                </form>
+                <a href="/view_cart"><img src="/static/img/cart-light.png" id="cart_icon"></a>
             </div>
             <div class="col">
                 <form action="/logout" class="bg-dark" method="post">
@@ -49,11 +47,14 @@
                 {% for product in products_with_categories %}
                     {% if product.id == category.id %}
                         <div class="card">
-                            <img src={{product.this_categorization.image_url}} alt="Denim Jeans" style="width:100%">
+                            <img src={{product.this_categorization.image_url}} alt='{{product.name}}' style="width:100%">
                             <h1>{{product.this_categorization.name}}</h1>
                             <p class="price">${{product.this_categorization.price}}</p>
                             <p>{{product.this_categorization.description}}</p>
-                            <p><button>Add to Cart</button></p>
+                            <form action="/add_cart" method="post">
+                                <input type="hidden" value= {{product.id}} name = "product_id"id="product_id">
+                                <p><button>Add to Cart</button></p>
+                            </form> 
                         </div>
                     {% endif %} 
                 {% endfor %}

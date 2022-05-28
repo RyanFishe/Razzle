@@ -17,7 +17,6 @@ class Category:
     def get_products_in_categories( cls ):
         query = "SELECT * FROM categories JOIN categorizations ON categories.id = categorizations.categories_id JOIN products ON products.id = categorizations.products_id ORDER by categories_id; "
         results = connectToMySQL('razz').query_db( query )
-        pprint(results, sort_dicts=False)
         
         categorizations = []
         for row_from_db in results:
@@ -33,7 +32,6 @@ class Category:
                 "updated_at" : row_from_db["products.updated_at"]
             }
             new_categorization = product.Product(product_data)
-            print("New categorization:", new_categorization)
             category_data = {
                 "id": row_from_db['id'],
                 "category": row_from_db['category'],
@@ -41,20 +39,17 @@ class Category:
                 "updated_at" : row_from_db['updated_at'],
                 "this_categorization": new_categorization
             }
-
-            print(category_data['this_categorization'])
             categorizations.append( cls( category_data ) )
-        print ("T**********", categorizations)
         return categorizations
     
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO categories (name) VALUES (%(name)s);"
+        query = "INSERT INTO categories (category) VALUES (%(category)s);"
         return connectToMySQL('razz').query_db(query,data)
 
     @classmethod
     def update(cls, data):
-        query = "UPDATE categories SET name = %(name)s WHERE id = %(id)s;"
+        query = "UPDATE categories SET category = %(category)s WHERE id = %(id)s;"
         return connectToMySQL('razz').query_db(query,data)
 
     @classmethod
@@ -62,7 +57,6 @@ class Category:
         query = "SELECT * FROM categories;"
         results = connectToMySQL('razz').query_db(query)
         # Create an empty list to append our instances of categories
-        print(results)
         categories = []
         # Iterate over the db results and create instances of categories with cls.
         for category in results:
@@ -87,8 +81,13 @@ class Category:
     def validate_category( category ):
         is_valid = True
         # test whether a field matches the pattern
-        if len(category['name']) < 3:
+        if len(category['category']) < 3:
             flash("Name must be at least 3 characters.")
             is_valid = False
         return is_valid
+
+    @classmethod
+    def make_categorization(cls, data):
+        query = "INSERT INTO categorizations (products_id,categories_id) VALUES (%(product_id)s,%(category_id)s);"
+        return connectToMySQL('razz').query_db(query, data)
     

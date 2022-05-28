@@ -17,7 +17,10 @@
             <div class="col col-lg-4">
                 <h1><a href="/dashboard">Razzle</a></h1>
             </div>
-            <div class="col col-4 "></div>
+            <div class="col-lg-2">
+                <h3 style="color: white;">Hello {{userIn.first_name}}!!!</h3>
+            </div>
+            <!-- <div class="col col-4 "></div> -->
             <div class="col">
                 <a href="/about">Company</a>
             </div>
@@ -37,6 +40,13 @@
     </div>
 
     <div class="container bg-dark text-white d-flexbox">
+        {% with messages = get_flashed_messages() %}     <!-- declare a variable called messages -->
+                        {% if messages %}                            <!-- check if there are any messages -->
+                            {% for message in messages %}            <!-- loop through the messages -->
+                                <p>{{message}}</p>                   <!-- display each message in a paragraph tag -->
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
         <div class="banner_box" style="display: flex-box; justify-content: center; width: inherit; ">
             <div class="banner_title">
                 <h2 style="display: flex; justify-content: center">New Arrivals</h2>
@@ -57,12 +67,15 @@
             {% for product in all_products %}
             <div class="card">
                 <a href={{product.id}}>
-                <img src={{product.image_url}} alt="Denim Jeans" style="width:100%" onclick="url = /{{product.id}}">
+                <img src={{product.image_url}} alt={{product.name}} style="width:100%" onclick="url = /{{product.id}}">
                 </a>
                 <h1>{{product.name}}</h1>
                 <p class="price">${{product.price}}</p>
                 <p class="dashDes">{{product.description}}</p>
-                <p><button>Add to Cart</button></p>
+                <form action="/add_cart" method="post">
+                <input type="hidden" value= {{product.id}} name = "product_id"id="product_id">
+                    <p><button>Add to Cart</button></p>
+                </form> 
             </div>
             {% endfor %}
 

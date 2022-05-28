@@ -26,9 +26,7 @@
                 <a href="/categories">Categories</a>
             </div>
             <div class="col">
-                <form action="/view_cart" class="bg-dark" method="post">
-                    <input type="image" class=" bg-dark text-primary" src="/static/img/cart-light.png" width="50px;" alt="Submit Form">
-                </form>
+                <a href="/view_cart"><img src="/static/img/cart-light.png" id="cart_icon"></a>
             </div>
             <div class="col">
                 <form action="/logout" class="bg-dark" method="post">
@@ -44,11 +42,14 @@
         <div class="gallery text-center  " style="width:100%;">
 
             <div class="card">
-                <img src= {{product.image_url}} alt="deni jeans"  style="width:100%">
+                <img src= {{product.image_url}} alt={{product.name}}  style="width:100%">
                 <h1>{{product.name}}</h1>
                 <p class="price">${{product.price}}</p>
                 <p class="dashDes">{{product.description}}</p>
-                <p><button>Add to Cart</button></p>
+                <form action="/add_cart" method="post">
+                <input type="hidden" value= {{product.id}} name = "product_id"id="product_id">
+                    <p><button>Add to Cart</button></p>
+                </form> 
             </div>
         </div>
     </div>

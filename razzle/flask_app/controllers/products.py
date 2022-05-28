@@ -1,6 +1,6 @@
 from flask_app import app
 from flask import Flask, render_template, request, redirect, session, flash
-from flask_app.models import user, product
+from flask_app.models import user, product, category
 
 
 @app.route('/product/create', methods=["POST"])
@@ -11,41 +11,52 @@ def create_product():
 
     data = {
         "name":request.form['name'],
-        "artist": session['full_name'],
         "description": request.form['description'],
         "price":request.form['price'],
         "quantity": request.form['quantity'],
-        "user_id": request.form['user_id']
+        "image_url": request.form['image_url']
+    }
+    product.Product.save(data)
+
+    name = {
+            "name": request.form['name']
+        }
+    product_id = product.Product.get_one_byName(name).id
+    category_id = request.form['category']
+    product_with_category = {
+        'product_id':product_id,
+        'category_id':category_id
     }
 
-    product.Product.save(data)
+    category.Category.make_categorization(product_with_category)
+
     return redirect('/dashboard');
 
 @app.route('/add_product')
 def show_add_page():
-    return render_template('add_product.html')
-
-# @app.route('/products/categories')
-# def show_categories():
-#     return render_template('categories.html')
 
 
-        
+    if  'admin' not in session:
+        flash("Must be logged in as admin!!")
+        return redirect('/dashboard')
+    else:        
+        all_categories = category.Category.get_all()
+        all_products = product.Product.get_all()
+        return render_template('add_product.html', all_products=all_products, all_categories=all_categories)
+
 
 @app.route('/edit_product', methods=["POST"])
 def edit_product():
-    # Checks if the cook time was inputted
-
+    
     if not product.Product.validate_product(request.form):
         return redirect(request.referrer)
     data = {
         
         "name":request.form['name'],
-        "artist": session['full_name'],
         "description": request.form['description'],
         "price":request.form['price'],
         "quantity": request.form['quantity'],
-        "user_id": request.form['user_id'],
+        "image_url": request.form['image_url'],
         "id":request.form['id']
     }
 
@@ -71,7 +82,7 @@ def show_edit_product(id):
     data = {
         "id": id
     }
-    return render_template('edit_product.html', product=product.Product.get_one(data))
+    return render_template('edit_product.html', product=product.Product.get_one(data), all_categories=category.Category.get_all())
 
 
 @app.route('/delete/<int:id>')

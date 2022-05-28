@@ -1,3 +1,4 @@
+
 from flask_app import app
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_app.models import user, category, category
@@ -7,21 +8,16 @@ from flask_app.models import user, category, category
 def create_category():
     option = request.form.get('quantity')
     if not category.Category.validate_category(request.form):
-        return redirect('/category/add')
+        return redirect('/add_product')
 
     data = {
-        "name":request.form['name'],
-        "artist": session['full_name'],
-        "description": request.form['description'],
-        "price":request.form['price'],
-        "quantity": request.form['quantity'],
-        "user_id": request.form['user_id']
+        "category":request.form['category'],
     }
 
     category.Category.save(data)
-    return redirect('/dashboard');
+    return redirect('/add_product');
 
-@app.route('/category/add')
+@app.route('/add_category')
 def show_add_category_page():
     return render_template('add_category.html')
 
@@ -37,23 +33,17 @@ def show_categories():
 
 @app.route('/edit_category', methods=["POST"])
 def edit_category():
-    # Checks if the cook time was inputted
 
     if not category.Category.validate_category(request.form):
         return redirect(request.referrer)
     data = {
         
-        "name":request.form['name'],
-        "artist": session['full_name'],
-        "description": request.form['description'],
-        "price":request.form['price'],
-        "quantity": request.form['quantity'],
-        "user_id": request.form['user_id'],
+        "category":request.form['category'],
         "id":request.form['id']
     }
 
     category.Category.update(data)
-    return redirect('/dashboard');
+    return redirect('/add_product');
 
 @app.route('/category/<int:id>')
 def show_single_category(id):
@@ -76,7 +66,7 @@ def show_edit_category(id):
     return render_template('edit_category.html', category=category.Category.get_one(data))
 
 
-@app.route('/delete/<int:id>')
-def delete_category(id):
-    category.Category.delete(id)
-    return redirect('/dashboard')
+@app.route('/delete_category', methods=["POST"])
+def delete_category():
+    category.Category.delete(request.form['id'])
+    return redirect('/add_product')

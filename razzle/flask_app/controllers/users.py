@@ -1,6 +1,6 @@
 # from unicodedata import category
+from hashlib import new
 from pprint import pprint
-
 from flask import flash, redirect, render_template, request, session
 from flask_app import app
 from flask_app.models import user, category, product
@@ -40,6 +40,9 @@ def create_account():
         session['user_id'] = user.User.save(data)
         session['user_name'] = request.form['first_name']
         session['full_name'] = request.form['first_name'] + ' ' + request.form['last_name']
+        session['cart'] = []
+        session['cart_total'] = 0
+        session['product_cart_quantity'] = 0
 
         # store user id into session
         return redirect('/dashboard')
@@ -61,7 +64,17 @@ def process_login():
         session['user_id'] = user_in_db.id
         session['user_name'] = user_in_db.first_name
         session['full_name'] = user_in_db.first_name + ' ' + user_in_db.last_name
+        session['cart'] = []
+        session['cart_total'] = 0
+        session['product_cart_quantity'] = 0
+
         print(session['full_name'])
+
+        if user_in_db.admin == True:
+            session['admin'] =  True
+        else:
+            session['admin'] = False
+        
         # never render on a post!!!
         return redirect("/dashboard")
 
@@ -70,21 +83,107 @@ def show_dashboard():
     if 'user_id' not in session:
         flash('Not logged in!')
         return render_template('/index.html')
+    
     data = { 
         "id": session['user_id'] 
         }
     
-    # user =  user.User.get_one(data)
+    userIn =  user.User.get_one(data)
+    if userIn.admin != None:
+        print("ADMIN JUST IN")
+        session['admin'] = True
     # all_users = user.User.get_all()
     all_products = product.Product.get_all()
 
     # pprint(purchases[0].this_purchase)
     
-    return render_template("dashboard.html", all_products = all_products )
+    return render_template("dashboard.html", all_products = all_products, userIn = userIn )
     # return render_template("/dashboard.html")
 @app.route("/view_cart")
 def show_cart():
+    print("%%%%%%",session['cart'])
+    # print("test", session['test'])
     return render_template("cart.html")
+
+
+@app.route('/add_cart', methods=['POST'])
+def add_cart_item():
+    print(request.form['product_id'])
+    cart = session['cart']
+    print(cart)
+
+
+    cart_item_id = request.form['product_id']
+    
+    cart_item_object = {
+        "id": cart_item_id
+    }
+    
+  
+    
+    cart_item_object = product.Product.get_one(cart_item_object)
+    print(cart_item_object)
+    cart_item_object = {
+        "name": cart_item_object.name,
+        "description": cart_item_object.description,
+        "price": cart_item_object.price,
+        "quantity": 0,
+        "image_url": cart_item_object.image_url,
+        "id": cart_item_object.id
+    }
+    print("*********",session['cart'])
+
+    if(session['cart']):
+        if cart_item_object['name'] in session['cart']:
+            for item, val in session['cart']:
+                if cart_item_object['name'] == item['name']:
+                    old_quantity = session['cart'][item]['quantity']
+                    new_quantity = old_quantity +1
+                    session['cart']['item']['quantity'] = new_quantity
+                    # item['quantity']= new_quantity
+                    # old_total = session['cart_total']
+                    # new_total = old_total + float(cart_item_object['price'])
+                    # session['cart_total'] = round(float(new_total),4)
+                    
+                    
+        else:
+            cart_item_object['quantity'] += 1
+            cart.append(cart_item_object)
+            session['cart'] = cart
+
+        for item in session['cart']:
+            quantity = item['quantity']
+            price = item['price']
+            this_price = float(quantity * price)
+            old_total = session['cart_total']
+            new_total = float(old_total) + float(this_price)
+            session['cart_total'] = round(float(new_total), 4)
+
+        # cart_item_object['quantity']=1
+        # cart.append(cart_item_object)
+        # session['cart'] = cart
+    else:
+        old_total = session['cart_total']
+        new_total = old_total + float(cart_item_object['price'])
+        cart_item_object['quantity'] =+ 1
+        cart.append(cart_item_object)
+        session['cart'] = cart
+
+
+        
+
+    
+    
+    
+    print("cart type =", type(cart), cart)
+    
+
+
+    
+    
+        
+
+    return redirect('/view_cart')
     
 @app.route('/join/product',methods=['POST'])
 def join_product():

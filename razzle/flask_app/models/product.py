@@ -17,7 +17,7 @@ class Product:
 
     @classmethod
     def save(cls, data):
-        query = "INSERT INTO products (name ,description, artist, price, quantity, image_url) VALUES (%(name)s,%(description)s,%(artist)s,%(price)s,%(quantity)s,%(image_url)s);"
+        query = "INSERT INTO products (name ,description, price, quantity, image_url) VALUES (%(name)s,%(description)s,%(price)s,%(quantity)s,%(image_url)s);"
         return connectToMySQL('razz').query_db(query,data)
 
     @classmethod
@@ -45,6 +45,14 @@ class Product:
         return cls(results[0]) 
 
     @classmethod
+    def get_one_byName(cls, data):
+        query = "SELECT * FROM products WHERE name = %(name)s;"
+        results = connectToMySQL('razz').query_db(query, data)
+        if len(results) < 1:
+            return False
+        return cls(results[0])
+
+    @classmethod
     def delete(cls, id):
         query  = f"DELETE FROM products WHERE id = {id};"
         return connectToMySQL('razz').query_db(query)
@@ -59,8 +67,11 @@ class Product:
         if len(product['description']) < 10:
             flash("Description must be at least 10 characters.")
             is_valid = False
-        if int(product['price']) < 1:
+        if float(product['price']) < 1:
             flash("Price must be more than $0.")
+            is_valid = False
+        if int(product['quantity']) < 0:
+            flash("Must Have quantity")
             is_valid = False
 
 
