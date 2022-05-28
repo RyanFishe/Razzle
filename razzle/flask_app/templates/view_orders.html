@@ -18,7 +18,7 @@
                 <h1><a href="/dashboard">Razzle</a></h1>
             </div>
             <div class="col-lg-2">
-                <h3 style="color: white;">Hello {{userIn.first_name}}!!!</h3>
+                
             </div>
             <!-- <div class="col col-4 "></div> -->
             <div class="col">
@@ -47,39 +47,33 @@
                             {% endfor %}
                         {% endif %}
                     {% endwith %}
-        <div class="banner_box" style="display: flex-box; justify-content: center; width: inherit; ">
-            <div class="banner_title">
-                <h2 style="display: flex; justify-content: center">New Arrivals</h2>
-            </div>
-            <div class="bannerRow">
-                <img src="./static/img/blue_neck.jpg" alt="left" id="left" onclick="swap1()">
-                <img src="./static/img/gold_ear.jpg" alt="cafe" id="Big">
-                <img src="./static/img/gold_neck.jpg" alt="right" id="right" onclick="swap2()">
-            </div>
-            <div class="dashDecor">
-                <h1>___</h1>
-                <h1 id="dashP">___</h1>
-                <h1>___</h1>
-                <h1>___</h1>
-            </div>
-        </div>
-        <div class="gallery text-center  " style="width:100%;">
-            {% for product in all_products %}
-            <div class="card">
-                <a href={{product.id}}>
-                <img src={{product.image_url}} alt={{product.name}} style="width:100%" onclick="url = /{{product.id}}">
-                </a>
-                <h1>{{product.name}}</h1>
-                <p class="price">${{product.price}}</p>
-                <p class="dashDes">{{product.description}}</p>
-                <form action="/add_cart" method="post">
-                <input type="hidden" value= {{product.id}} name = "product_id"id="product_id">
-                    <p><button>Add to Cart</button></p>
-                </form> 
-            </div>
-            {% endfor %}
 
-        </div>
+        <div class="col">
+            <h4>These are your orders</h4>
+            <table class="table-borderless ">
+                <thead>
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in all_orders %}
+                        <tr>
+                            <td>
+                                {{order.id}}
+                            </td>
+                            <td>
+                                |${{order.total_price}} |
+                            </td>
+                            <td>
+                                {{order.created_at}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                <tbody>
+            </table>
 
     </div>
 </body>

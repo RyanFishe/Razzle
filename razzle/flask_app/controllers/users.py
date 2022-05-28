@@ -3,7 +3,7 @@ from hashlib import new
 from pprint import pprint
 from flask import flash, redirect, render_template, request, session
 from flask_app import app
-from flask_app.models import user, category, product
+from flask_app.models import user, category, product, order
 # from flask_app.models import Message
 from flask_bcrypt import Bcrypt
 
