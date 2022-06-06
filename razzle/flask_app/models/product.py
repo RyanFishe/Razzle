@@ -76,4 +76,21 @@ class Product:
 
 
         return is_valid
+
+
+
+    # Trying to sort which categories are checked/unchecked so they can be added or deleted
+
+    # @classmethod
+    # def get_all_cat_for_product(product_id):
+    #     query = "SELECT * FROM categorizations where products_id = %(products_id)s;"
+    #     results = connectToMySQL('razz').query_db(query)
+    #     print("TYTYTYYTYTYTYT", results)
+    #     # Create an empty list to append our instances of products
+    #     products = []
+    #     # Iterate over the db results and create instances of products with cls.
+    #     for product in results:
+    #         products.append(product)
+    #     return products
+
     

@@ -19,7 +19,7 @@
             </div>
             <div class="col col-4 "></div>
             <div class="col">
-                       <a href="/my_orders">My Orders</a>
+                <a href="/my_orders">My Orders</a>
             </div>
             <div class="col">
                 <a href="/categories">Categories</a>
@@ -47,7 +47,9 @@
                 {% for product in products_with_categories %}
                     {% if product.id == category.id %}
                         <div class="card">
-                            <img src={{product.this_categorization.image_url}} alt='{{product.name}}' style="width:100%">
+                            <a href={{product.this_categorization.id}}>
+                                <img src={{product.this_categorization.image_url}} alt='{{product.name}}' style="width:100%">
+                            </a>
                             <h1>{{product.this_categorization.name}}</h1>
                             <p class="price">${{product.this_categorization.price}}</p>
                             <p>{{product.this_categorization.description}}</p>

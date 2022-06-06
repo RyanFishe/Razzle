@@ -1,3 +1,4 @@
+from math import prod
 from flask_app import app
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_app.models import user, product, category
@@ -57,10 +58,36 @@ def edit_product():
         "price":request.form['price'],
         "quantity": request.form['quantity'],
         "image_url": request.form['image_url'],
-        "id":request.form['id']
+        "id":request.form['product_id']
     }
-
     product.Product.update(data)
+
+
+    # Trying to sort which categories are checked/unchecked so they can be added or deleted
+
+
+    # product_id =  {
+    #     'products_id':request.form['product_id']
+    # }
+
+    # all_prod_cats = []
+    # all_prod_cats = product.Product.get_all_cat_for_product(product_id)
+    # print('product cat data aaaaaaaaaa', all_prod_cats)
+
+    cat_data = []
+    checked_cat = (request.form.getlist('category_id'))
+    print("THIS DATA &%&%&%&%&", checked_cat)
+    for i in checked_cat:
+        cat_data.append({
+        'product_id': request.form['product_id'],
+        "category_id":i
+    })
+    print("NEW DATAAAAAA", cat_data)
+    
+    for new_cat in cat_data:
+        category.Category.make_categorization(new_cat)
+
+    
     return redirect('/dashboard');
 
 @app.route('/<int:id>')

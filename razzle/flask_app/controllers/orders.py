@@ -13,7 +13,8 @@ def create_order():
         "user_id": user_id
     }
     order.Order.save(data)
-
+    session['cart_total'] = 0
+    session['cart'] = []
     # name = {
     #     "name": request.form['name']
     # }
@@ -31,7 +32,12 @@ def create_order():
 @app.route('/my_orders')
 def view_my_orders():
     user_id = session['user_id']
+    user_id = {
+        'user_id':user_id
+    }
+    all_orders = []
     all_orders = order.Order.get_one_by_user(user_id)
+    print("iyiyiyiy", all_orders)
 
     return render_template('view_orders.html', all_orders = all_orders)
 

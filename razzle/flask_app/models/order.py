@@ -47,7 +47,11 @@ class Order:
         results = connectToMySQL('razz').query_db(query, data)
         if (results) == False:
             return ("No Orders")
-        return cls(results[0])
+        orders = []
+        # Iterate over the db results and create instances of orders with cls.
+        for order in results:
+            orders.append(cls(order))
+        return orders
 
     @classmethod
     def delete(cls, id):
