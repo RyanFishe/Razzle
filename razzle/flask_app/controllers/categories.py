@@ -23,7 +23,7 @@ def show_add_category_page():
 
 @app.route('/categories')
 def show_categories():
-   
+
     products_with_categories = category.Category.get_products_in_categories()
     all_categories = category.Category.get_all()
     return render_template('categories.html', all_categories = all_categories, products_with_categories=products_with_categories)

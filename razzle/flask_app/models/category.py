@@ -56,12 +56,14 @@ class Category:
     def get_all(cls):
         query = "SELECT * FROM categories;"
         results = connectToMySQL('razz').query_db(query)
+        print('TEWASSS', results)
         # Create an empty list to append our instances of categories
         categories = []
         # Iterate over the db results and create instances of categories with cls.
         for category in results:
             category['this_categorization'] = None
             categories.append( cls(category) )
+        pprint(categories)
         return categories
 
     @classmethod

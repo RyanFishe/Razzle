@@ -83,7 +83,7 @@ class Product:
 
     # @classmethod
     # def get_all_cat_for_product(product_id):
-    #     query = "SELECT * FROM categorizations where products_id = %(products_id)s;"
+    #     query = "SELECT * FROM categories JOIN categorizations ON categories.id = categorizations.categories_id JOIN products ON products.id = categorizations.products_id WHERE products_id = %(products_id)s;"
     #     results = connectToMySQL('razz').query_db(query)
     #     print("TYTYTYYTYTYTYT", results)
     #     # Create an empty list to append our instances of products
