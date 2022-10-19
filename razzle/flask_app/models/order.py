@@ -54,9 +54,32 @@ class Order:
         return orders
 
     @classmethod
+    def getOrderId(cls):
+        query = "SELECT max(id) from orders;"
+        results = connectToMySQL('razz').query_db(query)
+        if len(results) < 1:
+            return False
+        return (results[0])
+
+    @classmethod
+    def saveDetails(cls, data):
+        query = "INSERT INTO order_details (quantity, order_id, product_id) VALUES (%(quantity)s,%(order_id)s,%(product_id)s);"
+        return connectToMySQL('razz').query_db(query, data)
+
+    @classmethod
+    def get_products_in_orders(cls, data):
+        query = "SELECT product_id, quantity from order_details where order_id = %(id)s;"
+        results = connectToMySQL('razz').query_db(query, data)
+        return results
+    
+
+
+    @classmethod
     def delete(cls, id):
         query = f"DELETE FROM orders WHERE id = {id};"
         return connectToMySQL('razz').query_db(query)
+
+
 
     # @staticmethod
     # def validate_Order(Order):

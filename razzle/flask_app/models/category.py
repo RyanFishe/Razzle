@@ -15,7 +15,7 @@ class Category:
 
     @classmethod
     def get_products_in_categories( cls ):
-        query = "SELECT * FROM categories JOIN categorizations ON categories.id = categorizations.categories_id JOIN products ON products.id = categorizations.products_id ORDER by categories_id; "
+        query = "SELECT * FROM categories JOIN categorizations ON categories.id = categorizations.category_id JOIN products ON products.id = categorizations.product_id ORDER by category_id; "
         results = connectToMySQL('razz').query_db( query )
         
         categorizations = []
@@ -90,6 +90,6 @@ class Category:
 
     @classmethod
     def make_categorization(cls, data):
-        query = "INSERT INTO categorizations (products_id,categories_id) VALUES (%(product_id)s,%(category_id)s);"
+        query = "INSERT INTO categorizations (product_id,category_id) VALUES (%(product_id)s,%(category_id)s);"
         return connectToMySQL('razz').query_db(query, data)
     

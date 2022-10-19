@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="/static/css/style.css" rel="stylesheet">
-    <title>Dashboard</title>
+    <title>Order Details</title>
 </head>
 
 <body>
@@ -49,36 +49,39 @@
                     {% endwith %}
 
         <div class="col">
-            <h4>These are your orders</h4>
+            <h4>Details for Order: {{full_order.order_id}}</h4>
             <table class="table table-bordered border-white text-white bg-opacity-75">
                 <thead>
                     <tr>
-                        <th scope="col">Order #</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Order Date</th>
-                        <th scope="col"></th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in all_orders %}
+                    {% for order in order_list %}
                         <tr>
                             <td>
-                                {{order.id}}
+                                {{order[0].name}}
                             </td>
                             <td>
-                                ${{order.total_price}} 
+                                ${{order[0].price}} 
                             </td>
                             <td>
-                                {{order.created_at}}
+                                Ordered: {{order[1]}} 
                             </td>
                             <td>
-                                <a href="{{'/view_order/%s'%order.id }}">View Details</a>
+                                ${{(order[1] * order[0].price)}} 
                             </td>
                         </tr>
                     {% endfor %}
                 <tbody>
             </table>
-
+            <div>
+                <h2>Total paid: ${{full_order.total_price}}</h2>
+                <h2>Date of purchase: {{full_order.created_at}}</h2>
+            </div>
     </div>
 </body>
 
