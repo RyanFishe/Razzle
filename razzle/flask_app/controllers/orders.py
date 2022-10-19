@@ -11,13 +11,6 @@ def create_order():
     print('ORDER PLACED')
 
 
-    # order_items = []
-    # for item in session['cart']:
-    #     order_items.append([item['name'], item['quantity'], item['price']])
-    # print('testesss',order_items)
-
-    
-
     data = {
         "total_price": total_price,
         "user_id": user_id
@@ -38,17 +31,6 @@ def create_order():
 
     session['cart_total'] = 0
     session['cart'] = []
-    # name = {
-    #     "name": request.form['name']
-    # }
-    # order_id = order.Order.get_one_byName(name).id
-    # category_id = request.form['category']
-    # order_with_category = {
-    #     'order_id': order_id,
-    #     'category_id': category_id
-    # }
-
-
 
     return redirect('/dashboard')
 
@@ -92,61 +74,3 @@ def view_order_details(id):
     return render_template('view_order_details.html', order_list = order_list, full_order = full_order )
 
 
-# @app.route('/add_order')
-# def show_oder_page():
-
-#     if 'admin' not in session:
-#         flash("Must be logged in as admin!!")
-#         return redirect('/dashboard')
-#     else:
-#         all_categories = category.Category.get_all()
-#         all_orders = order.Order.get_all()
-#         return render_template('add_order.html', all_orders=all_orders, all_categories=all_categories)
-
-
-# @app.route('/edit_order', methods=["POST"])
-# def edit_order():
-
-#     if not order.Order.validate_order(request.form):
-#         return redirect(request.referrer)
-#     data = {
-
-#         "name": request.form['name'],
-#         "description": request.form['description'],
-#         "price": request.form['price'],
-#         "quantity": request.form['quantity'],
-#         "image_url": request.form['image_url'],
-#         "id": request.form['id']
-#     }
-
-#     order.Order.update(data)
-#     return redirect('/dashboard')
-
-
-# @app.route('/<int:id>')
-# def show_order(id):
-#     if 'user_id' not in session:
-#         flash('Not logged in!')
-#         return render_template('/index.html')
-#     data = {
-#         "id": id
-#     }
-#     print(order.Order.get_one(data).image_url)
-#     return render_template('view_order.html', order=order.Order.get_one(data))
-
-
-# @app.route('/order/edit/<int:id>')
-# def show_edit_order(id):
-#     if 'user_id' not in session:
-#         flash('Not logged in!')
-#         return render_template('/index.html')
-#     data = {
-#         "id": id
-#     }
-#     return render_template('edit_order.html', order=order.Order.get_one(data), all_categories=category.Category.get_all())
-
-
-# @app.route('/delete/<int:id>')
-# def delete_order(id):
-#     order.Order.delete(id)
-#     return redirect('/dashboard')
