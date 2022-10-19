@@ -1,7 +1,7 @@
 from flask_app import app
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_app.models import user, product, category, order
-from flask_app.config.mysqlconnection import connectToMySQL
+
 
 
 @app.route('/place_order', methods=["POST"])
