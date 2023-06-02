@@ -54,7 +54,7 @@
                             <p class="price">${{product.this_categorization.price}}</p>
                             <p>{{product.this_categorization.description}}</p>
                             <form action="/add_cart" method="post">
-                                <input type="hidden" value= {{product.id}} name = "product_id"id="product_id">
+                                <input type="hidden" value= {{product.this_categorization.id}} name = "product_id"id="product_id">
                                 <p><button>Add to Cart</button></p>
                             </form> 
                         </div>
