@@ -16,14 +16,6 @@ def create_order():
     user_id = session['user_id']
     print('ORDER PLACED')
 
-
-    # order_items = []
-    # for item in session['cart']:
-    #     order_items.append([item['name'], item['quantity'], item['price']])
-    # print('testesss',order_items)
-
-    
-
     data = {
         "total_price": total_price,
         "user_id": user_id
