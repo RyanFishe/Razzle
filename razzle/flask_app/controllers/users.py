@@ -107,7 +107,7 @@ def add_cart_item():
 
 
     cart_item_id = request.form['product_id']
-    
+    print(request.form['product_id'])
     cart_item_object = {
         "id": cart_item_id
     }
@@ -121,7 +121,7 @@ def add_cart_item():
         "image_url": cart_item_object.image_url,
         "id": cart_item_object.id
     }
-
+# This section will check if same item is in cart, and will adjust the quantity instead of adding a "new" item.
     if(session['cart']):
         print(cart_item_object['name'])
         if next((item for item in session['cart'] if item["name"] == cart_item_object['name']), False):
@@ -137,7 +137,7 @@ def add_cart_item():
             cart.append(cart_item_object)
             session['cart'] = cart
 
-
+# This section updates the cart's total appropriately.
         new_total = 0
         for item in session['cart']:
             quantity = int(item['quantity'])

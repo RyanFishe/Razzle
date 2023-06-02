@@ -40,6 +40,7 @@ class Category:
                 "this_categorization": new_categorization
             }
             categorizations.append( cls( category_data ) )
+            print(categorizations[0])
         return categorizations
     
     @classmethod
