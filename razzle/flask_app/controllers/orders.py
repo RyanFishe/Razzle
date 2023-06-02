@@ -36,6 +36,17 @@ def create_order():
 
     session['cart_total'] = 0
     session['cart'] = []
+    # name = {
+    #     "name": request.form['name']
+    # }
+    # order_id = order.Order.get_one_byName(name).id
+    # category_id = request.form['category']
+    # order_with_category = {
+    #     'order_id': order_id,
+    #     'category_id': category_id
+    # }
+
+
 
     return redirect('/dashboard')
 
